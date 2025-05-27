@@ -1,10 +1,10 @@
 from django.urls import path
-from . import views
+from credit.views import register_customer, check_eligibility, create_loan, view_loan, view_loans
 
 urlpatterns = [
-    path('register', views.register_customer),
-    path('check-eligibility', views.check_eligibility),
-    path('create-loan', views.create_loan),
-    path('view-loan/<int:loan_id>', views.view_loan),
-    path('view-loans/<int:customer_id>', views.view_loans),
+    path('register', register_customer),
+    path('check-eligibility', check_eligibility),
+    path('create-loan', create_loan),
+    path('view-loan/<int:loan_id>', view_loan),
+    path('view-loans/<int:customer_id>', view_loans),
 ]
