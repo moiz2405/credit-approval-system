@@ -21,8 +21,12 @@ def ingest_customer_data():
 def ingest_loan_data():
     df = pd.read_excel("loan_data.xlsx")
     for _, row in df.iterrows():
-        customer = Customer.objects.get(customer_id=row['customer id'])
+        try:
+            customer = Customer.objects.get(customer_id=row['customer id'])
+        except Customer.DoesNotExist:
+            continue
         Loan.objects.create(
+            loan_id=row['loan id'],
             customer=customer,
             loan_amount=row['loan amount'],
             tenure=row['tenure'],
