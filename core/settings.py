@@ -14,6 +14,8 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# core/settings.py 
+CELERY_BROKER_URL = 'redis://redis:6379/0'  # 'redis' matches service name in docker-compose
 
 
 # Quick-start development settings - unsuitable for production
@@ -79,7 +81,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'loan_db',
+        'NAME': 'creditdb',
         'USER': 'loan_user',
         'PASSWORD': 'password',
         'HOST': 'db',
