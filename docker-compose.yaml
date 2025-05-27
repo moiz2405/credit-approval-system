@@ -5,8 +5,8 @@ services:
     image: postgres
     environment:
       POSTGRES_DB: creditdb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: loan_user
+      POSTGRES_PASSWORD: password
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -21,6 +21,21 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis  # if you use redis as broker
+
+  celery:
+    build: .
+    command: celery -A core worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data:
