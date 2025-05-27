@@ -6,45 +6,75 @@ from datetime import datetime
 @shared_task
 def ingest_customer_data():
     df = pd.read_excel("customer_data.xlsx")
-    # Normalize columns: lowercase and strip spaces
-    df.columns = df.columns.str.strip().str.lower()
-    print(df.columns.tolist())
+    df.columns = df.columns.str.strip().str.lower().str.strip("'\"")
+
+    column_map = {
+        'customer id': 'customer_id',
+        'first name': 'first_name',
+        'last name': 'last_name',
+        'phone number': 'phone_number',
+        'monthly salary': 'monthly_salary',
+        'approved limit': 'approved_limit',
+    }
+
+    # Rename columns
+    df.rename(columns=column_map, inplace=True)
+
+    print(df.columns.tolist())  # Should show the new column names
 
     for _, row in df.iterrows():
+        defaults = {
+            'first_name': row['first_name'],
+            'last_name': row['last_name'],
+            'phone_number': row['phone_number'],
+            'monthly_salary': row['monthly_salary'],
+            'approved_limit': row['approved_limit'],
+            'current_debt': 0
+        }
         Customer.objects.update_or_create(
-            customer_id=row['customer id'],
-            defaults={
-                'first_name': row['first name'],
-                'last_name': row['last name'],
-                'phone_number': row['phone number'],
-                'monthly_salary': row['monthly salary'],
-                'approved_limit': row['approved limit'],
-                'current_debt': 0
-            }
+            customer_id=row['customer_id'],
+            defaults=defaults
         )
 
 @shared_task
 def ingest_loan_data():
     df = pd.read_excel("loan_data.xlsx")
-    df.columns = df.columns.str.strip().str.lower()
-    print(df.columns.tolist())
+    df.columns = df.columns.str.strip().str.lower().str.strip("'\"")
+
+    column_map = {
+        'loan id': 'loan_id',
+        'customer id': 'customer_id',
+        'loan amount': 'loan_amount',
+        'tenure': 'tenure',
+        'interest rate': 'interest_rate',
+        'monthly payment': 'monthly_installment',
+        'emis paid on time': 'emis_paid_on_time',
+        'date of approval': 'start_date',
+        'end date': 'end_date'
+    }
+
+    df.rename(columns=column_map, inplace=True)
+
+    print(df.columns.tolist())  # Should show the renamed column headers
 
     for _, row in df.iterrows():
         try:
-            customer = Customer.objects.get(customer_id=row['customer id'])
+            customer = Customer.objects.get(customer_id=row['customer_id'])
         except Customer.DoesNotExist:
             continue
 
+        defaults = {
+            'customer': customer,
+            'loan_amount': row['loan_amount'],
+            'tenure': row['tenure'],
+            'interest_rate': row['interest_rate'],
+            'monthly_installment': row['monthly_installment'],
+            'emis_paid_on_time': row['emis_paid_on_time'],
+            'start_date': pd.to_datetime(row['start_date']).date(),
+            'end_date': pd.to_datetime(row['end_date']).date(),
+        }
+
         Loan.objects.update_or_create(
-            loan_id=row['loan id'],
-            defaults={
-                'customer': customer,
-                'loan_amount': row['loan amount'],
-                'tenure': row['tenure'],
-                'interest_rate': row['interest rate'],
-                'monthly_installment': row['monthly payment'],
-                'emis_paid_on_time': row['emis paid on time'],
-                'start_date': pd.to_datetime(row['date of approval']).date(),
-                'end_date': pd.to_datetime(row['end date']).date(),
-            }
+            loan_id=row['loan_id'],
+            defaults=defaults
         )
