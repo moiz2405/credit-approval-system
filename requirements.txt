@@ -6,3 +6,5 @@ django-cors-headers
 pandas
 openpyxl
 gunicorn
+redis>=4.0.0
+celery>=5.0.0
