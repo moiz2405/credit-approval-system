@@ -1,0 +1,3 @@
+### View Loan by ID
+GET http://localhost:8000/view-loan/5930
+Content-Type: application/json
