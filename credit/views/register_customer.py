@@ -10,7 +10,7 @@ def register_customer(request):
     try:
         first_name = data['first_name']
         last_name = data['last_name']
-        age = data['age']
+        age = int(data['age'])
         monthly_income = int(data['monthly_income'])
         phone_number = data['phone_number']
 
@@ -26,7 +26,7 @@ def register_customer(request):
         )
 
         return Response({
-            "customer_id": customer.id,
+            "customer_id": customer.customer_id,
             "name": f"{customer.first_name} {customer.last_name}",
             "age": customer.age,
             "monthly_income": customer.monthly_salary,
