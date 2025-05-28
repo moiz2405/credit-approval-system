@@ -1,3 +1,44 @@
-### View Loan by ID
-GET http://localhost:8000/view-loan/5930
+### Register Customer
+POST http://localhost:8000/register
 Content-Type: application/json
+
+{
+  "first_name": "Almoiz",
+  "last_name": "Khan",
+  "monthly_income": 100000,
+  "phone_number": "9876543210"
+}
+
+### Check Loan Eligibility
+POST http://localhost:8000/check-eligibility
+Content-Type: application/json
+
+{
+  "customer_id": 304,
+  "loan_amount": 50000,
+  "interest_rate": 10.5,
+  "tenure": 24
+}
+
+### create loan
+POST http://localhost:8000/create-loan
+Content-Type: application/json
+
+{
+  "customer_id": 304,
+  "loan_amount": 500000,
+  "interest_rate": 10.5,
+  "tenure": 12
+}
+
+
+
+### View Loan by ID
+GET http://localhost:8000/view-loan/7
+Content-Type: application/json
+
+### View loan by customer ID
+GET http://localhost:8000/view-loans/304
+Content-Type: application/json
+
+
