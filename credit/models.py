@@ -18,7 +18,7 @@ class Loan(models.Model):
     tenure = models.IntegerField()
     interest_rate = models.FloatField()
     monthly_installment = models.FloatField()  # Matches "monthly repayment (emi)"
-    emis_paid_on_time = models.IntegerField()
+    emis_paid_on_time = models.IntegerField(default=0)
     start_date = models.DateField()
     end_date = models.DateField()
 
