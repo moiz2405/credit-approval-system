@@ -10,7 +10,7 @@ def register_customer(request):
     try:
         first_name = data['first_name']
         last_name = data['last_name']
-        age = int(data['age'])
+        # age = int(data['age'])
         monthly_income = int(data['monthly_income'])
         phone_number = data['phone_number']
 
@@ -19,7 +19,7 @@ def register_customer(request):
         customer = Customer.objects.create(
             first_name=first_name,
             last_name=last_name,
-            age=age,
+            # age=age,
             monthly_salary=monthly_income,
             approved_limit=approved_limit,
             phone_number=phone_number
@@ -28,7 +28,7 @@ def register_customer(request):
         return Response({
             "customer_id": customer.customer_id,
             "name": f"{customer.first_name} {customer.last_name}",
-            "age": customer.age,
+            # "age": customer.age,
             "monthly_income": customer.monthly_salary,
             "approved_limit": customer.approved_limit,
             "phone_number": customer.phone_number
