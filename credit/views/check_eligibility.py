@@ -12,7 +12,6 @@ def calculate_credit_score(customer):
 
     score = 100
 
-    # Components
     total_loans = loans.count()
     on_time_loans = sum(loan.emis_paid_on_time for loan in loans)
     total_loan_volume = sum(loan.loan_amount for loan in loans)
@@ -41,12 +40,13 @@ def check_eligibility(request):
         interest_rate = float(data['interest_rate'])
         tenure = int(data['tenure'])
 
-        customer = Customer.objects.get(id=customer_id)
+        customer = Customer.objects.get(customer_id=customer_id)
         credit_score = calculate_credit_score(customer)
 
         approval = False
         corrected_rate = interest_rate
 
+        # Credit score based loan approval logic
         if credit_score > 50:
             approval = True
         elif 30 < credit_score <= 50:
@@ -60,21 +60,22 @@ def check_eligibility(request):
         elif credit_score <= 10:
             approval = False
 
-        emis = calculate_emi(loan_amount, corrected_rate, tenure)
-        current_loans = Loan.objects.filter(customer=customer)
-        total_emis = sum(loan.monthly_installment for loan in current_loans)
+        # EMI check
+        new_emi = calculate_emi(loan_amount, corrected_rate, tenure)
+        existing_loans = Loan.objects.filter(customer=customer)
+        total_existing_emis = sum(loan.monthly_installment for loan in existing_loans)
 
-        if (total_emis + emis) > (0.5 * customer.monthly_salary):
+        if (total_existing_emis + new_emi) > (0.5 * customer.monthly_salary):
             approval = False
 
         return Response({
-            "customer_id": customer.id,
+            "customer_id": customer.customer_id,
             "approval": approval,
             "interest_rate": interest_rate,
             "corrected_interest_rate": corrected_rate,
             "tenure": tenure,
-            "monthly_installment": emis
-        })
+            "monthly_installment": new_emi
+        }, status=status.HTTP_200_OK)
 
     except Customer.DoesNotExist:
         return Response({"error": "Customer not found"}, status=status.HTTP_404_NOT_FOUND)
