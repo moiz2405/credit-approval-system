@@ -3,30 +3,35 @@ POST http://localhost:8000/register
 Content-Type: application/json
 
 {
-  "first_name": "Almoiz",
+  "first_name": "Ahad",
   "last_name": "Khan",
   "monthly_income": 100000,
-  "phone_number": "9876543210"
+  "phone_number": "9876543211"
 }
+
+
 
 ### Check Loan Eligibility
 POST http://localhost:8000/check-eligibility
 Content-Type: application/json
 
 {
-  "customer_id": 304,
+  "customer_id": 306,
   "loan_amount": 50000,
   "interest_rate": 10.5,
   "tenure": 24
 }
+
+
+
 
 ### create loan
 POST http://localhost:8000/create-loan
 Content-Type: application/json
 
 {
-  "customer_id": 304,
-  "loan_amount": 500000,
+  "customer_id": 306,
+  "loan_amount": 100000,
   "interest_rate": 10.5,
   "tenure": 12
 }
@@ -34,11 +39,11 @@ Content-Type: application/json
 
 
 ### View Loan by ID
-GET http://localhost:8000/view-loan/7
+GET http://localhost:8000/view-loan/11
 Content-Type: application/json
 
 ### View loan by customer ID
-GET http://localhost:8000/view-loans/304
+GET http://localhost:8000/view-loans/306
 Content-Type: application/json
 
 
