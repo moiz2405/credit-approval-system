@@ -17,10 +17,8 @@ def ingest_customer_data():
         'approved limit': 'approved_limit',
     }
 
-    # Rename columns
     df.rename(columns=column_map, inplace=True)
-
-    print(df.columns.tolist())  # Should show the new column names
+    print("Customer columns:", df.columns.tolist())
 
     for _, row in df.iterrows():
         defaults = {
@@ -32,7 +30,7 @@ def ingest_customer_data():
             'current_debt': 0
         }
         Customer.objects.update_or_create(
-            customer_id=row['customer_id'],
+            customer_id=row['customer_id'],  # ✅ Fixed here
             defaults=defaults
         )
 
@@ -54,8 +52,7 @@ def ingest_loan_data():
     }
 
     df.rename(columns=column_map, inplace=True)
-
-    print(df.columns.tolist())  # Should show the renamed column headers
+    print("Loan columns:", df.columns.tolist())
 
     for _, row in df.iterrows():
         try:
