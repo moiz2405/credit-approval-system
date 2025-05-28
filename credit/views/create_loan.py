@@ -10,7 +10,8 @@ from credit.views.check_eligibility import calculate_emi
 def create_loan(request):
     try:
         data = request.data
-        customer = Customer.objects.get(id=data['customer_id'])
+        # customer = Customer.objects.get(id=data['customer_id'])
+        customer = Customer.objects.get(customer_id=data['customer_id'])
 
         loan_amount = float(data['loan_amount'])
         interest_rate = float(data['interest_rate'])
@@ -32,7 +33,7 @@ def create_loan(request):
 
         return Response({
             "loan_id": loan.loan_id,
-            "customer_id": customer.id,
+            "customer_id": customer.customer_id,
             "loan_approved": True,
             "message": "Loan successfully created",
             "monthly_installment": loan.monthly_installment
