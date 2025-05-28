@@ -14,11 +14,11 @@ def view_loan(request, loan_id):
         return Response({
             "loan_id": loan.loan_id,
             "customer": {
-                "id": customer.id,
+                "id": customer.customer_id,
                 "first_name": customer.first_name,
                 "last_name": customer.last_name,
                 "phone_number": customer.phone_number,
-                "age": customer.age
+                # "age": customer.age
             },
             "loan_amount": loan.loan_amount,
             "interest_rate": loan.interest_rate,
